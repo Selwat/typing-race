@@ -1,5 +1,6 @@
 "use client"
 import { useState } from "react"
+import TypingRaceClient from "./components/typingRaceClient";
 
 export default function Home() {
   const [user, setUser] = useState<{ userId: string; username: string } | null>(
@@ -42,7 +43,9 @@ export default function Home() {
 
   return (
     <main className="p-8 w-full flex flex-col lg:flex-row gap-8 items-start">
-      test
+      <div className="w-full flex-col gap-2">
+        <TypingRaceClient userId={user.userId} username={user.username} />
+      </div>
     </main>
   )
 }
