@@ -1,9 +1,11 @@
 import { Server } from "socket.io"
 import sentences from "../app/lib/sentences.json" assert { type: "json" }
 
-const io = new Server(3001, {
-  cors: { origin: "*" },
-})
+const PORT = process.env.PORT || 3001
+
+const io = new Server(PORT, { cors: { origin: "*" } })
+
+console.log(`Socket.io running on port ${PORT}`)
 
 let players = {}
 let currentSentence = sentences[Math.floor(Math.random() * sentences.length)]
@@ -19,7 +21,7 @@ const startNewRound = () => {
 
 setInterval(startNewRound, ROUND_DURATION * 1000)
 
-// Obsługa połączenia klienta
+// Client connection support
 io.on("connection", (socket) => {
   const { userId } = socket.handshake.query
 
@@ -30,7 +32,7 @@ io.on("connection", (socket) => {
     io.emit("leaderboard-update", Object.values(players))
   })
 
-  // Rozłączenie gracza
+  // Player disconnection
   socket.on("disconnect", () => {
     delete players[userId]
     io.emit("leaderboard-update", Object.values(players))

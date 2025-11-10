@@ -14,20 +14,23 @@ interface UseSocketOptions {
   username: string
 }
 
+const SOCKET_URL =
+  process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001";
+
 export const useSocket = ({ userId, username }: UseSocketOptions) => {
   const [socket, setSocket] = useState<Socket | null>(null)
   const [isConnected, setIsConnected] = useState(false)
 
   useEffect(() => {
-    const s = io("http://localhost:3001", { query: { userId, username } })
-    setSocket(s)
+    const s = io(SOCKET_URL, { query: { userId, username } });
+    setSocket(s);
 
-    s.on("connect", () => setIsConnected(true))
-    s.on("disconnect", () => setIsConnected(false))
-    s.on("error", () => setIsConnected(false))
+    s.on("connect", () => setIsConnected(true));
+    s.on("disconnect", () => setIsConnected(false));
+    s.on("error", () => setIsConnected(false));
 
-    return () => s.disconnect()
-  }, [userId, username])
+    return () => s.disconnect();
+  }, [userId, username]);
 
   const sendTypingData = useCallback(
     (data: PlayerStats) => socket?.emit("typing-data", data),
