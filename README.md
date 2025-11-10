@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Typing Race - README
 
-## Getting Started
+## Project Overview
+Typing Race is a real-time typing game built with **Next.js**, **React**, and **TailwindCSS**. Players compete to type predefined sentences as quickly and accurately as possible. The application uses **WebSockets (Socket.IO)** for real-time synchronization of scores and leaderboard updates.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Assumptions & Design Choices
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Real-time gameplay**: Players type sentences simultaneously in timed rounds.
+- **Round duration**: Each round lasts 60 seconds and contains one sentence.
+- **Realtime sync**: Socket.IO handles leaderboard updates and new rounds.
+- **Simplified feedback**: Instead of tracking every typed character live, we use a **progress/streak system** for performance metrics.
+- **Data storage**:
+  - Server: In-memory storage (no database).
+  - Client: Stores only `username` and `userId` in component state.
+- **UI/UX**: Clean, responsive design using TailwindCSS with modern rounded cards and progress indicators.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Features
 
-## Learn More
+- Timed rounds with predefined sentences.
+- Accuracy and WPM calculation in real-time.
+- Progress bar and leaderboard updated in real-time.
+- User-friendly input and focus management.
+- Responsive layout for desktop and mobile.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Technologies Used
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Next.js 15**
+- **React 19**
+- **TailwindCSS 4**
+- **TypeScript 5**
+- **Socket.IO 4** (server + client)
+- **Playwright** for end-to-end testing
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Running the Application
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Install dependencies**:
+   npm install
+2. **Start the development server:**
+    npm run dev
+3. **Open your browser:**
+    http://localhost:3000
+
+
+**Testing with Playwright**
+End-to-end tests are implemented using Playwright.
+
+1. **Ensure the development server is running:**
+    npm run dev
+2. **Run E2E tests:**
+    npx playwright test
+
+**Future Improvements**
+
+-Persist leaderboard data in a database to survive server restarts.
+
+-Add multiple difficulty levels or vary sentence lengths.
+
+-Provide more detailed real-time feedback for typing accuracy and streaks.
+
+-Improve handling of users joining or leaving mid-round.
+
+-Enhance UI/UX for mobile devices.
+
+-Add user authentication and persistent stats.
+
+**Notes**
+
+-The server uses in-memory storage, so all data is lost upon restart.
+
+-Playwright tests cover basic gameplay and leaderboard functionality.
