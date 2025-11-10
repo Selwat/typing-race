@@ -76,3 +76,5 @@ End-to-end tests are implemented using Playwright.
 -The server uses in-memory storage, so all data is lost upon restart.
 
 -Playwright tests cover basic gameplay and leaderboard functionality.
+
+![alt text](image.png)
