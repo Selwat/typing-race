@@ -20,7 +20,6 @@ export default function TypingRaceClient({
 
   const { sendTypingData, onNewRound } = useSocket({ userId, username })
 
-  // Obsługa nowej rundy od serwera
   useEffect(() => {
     const unsubscribe = onNewRound(({ sentence: newSentence, endTime }) => {
       setSentence(newSentence)
@@ -32,25 +31,21 @@ export default function TypingRaceClient({
         setTimeLeft(t)
       }
 
-      updateTime() // ustaw początkowy czas
+      updateTime()
       const interval = setInterval(updateTime, 500)
       inputRef.current?.focus()
 
       return () => clearInterval(interval)
     })
 
-    return () => {
-      unsubscribe?.()
-    }
+    return () => unsubscribe?.()
   }, [onNewRound])
 
-  // Obsługa inputu gracza
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     setUserInput(value)
     if (!startTime) setStartTime(Date.now())
 
-    // Obliczamy poprawne słowa
     const sentenceWords = sentence.split(" ")
     const typedWords = value.split(" ")
     let correctWords = 0
@@ -58,7 +53,6 @@ export default function TypingRaceClient({
       if (w === sentenceWords[i]) correctWords++
     })
 
-    // Dokładność w znakach
     const correctChars = Array.from(value).reduce(
       (acc, char, i) => (char === sentence[i] ? acc + 1 : acc),
       0
@@ -69,11 +63,9 @@ export default function TypingRaceClient({
     const wpm = timeElapsed ? Math.round((correctWords / timeElapsed) * 60) : 0
     const progress = Math.min((value.length / sentence.length) * 100, 100)
 
-    // Wysyłamy dane na serwer
     sendTypingData({ userId, username, wpm, accuracy, progress })
   }
 
-  // Renderowanie liter w kolorach (zielone = poprawne, czerwone = błędne)
   const renderColoredSentence = () =>
     Array.from(sentence).map((c, i) => (
       <span
@@ -83,7 +75,7 @@ export default function TypingRaceClient({
             ? c === userInput[i]
               ? "text-green-500"
               : "text-red-500"
-            : ""
+            : "text-gray-600"
         }
       >
         {c}
@@ -91,12 +83,14 @@ export default function TypingRaceClient({
     ))
 
   return (
-    <div className="w-full max-w-xl p-6 bg-white rounded-2xl shadow-lg border border-gray-200 text-gray-800">
-      <h2 className="text-2xl font-bold mb-4">Typing Race</h2>
-      <div className="mb-2 text-sm text-gray-500">
-        Czas do końca rundy: {timeLeft}s
+    <div className="w-full max-w-xl p-6 bg-white rounded-3xl shadow-xl border border-gray-200 text-gray-800">
+      <h2 className="text-3xl font-bold mb-4 text-center text-gray-900">
+        Typing Race
+      </h2>
+      <div className="mb-2 text-sm text-gray-500 text-center">
+        Time left in the round: <span className="font-medium">{timeLeft}s</span>
       </div>
-      <div className="mb-4 p-4 bg-gray-100 rounded font-mono text-lg tracking-wide min-h-[3rem]">
+      <div className="mb-4 p-4 bg-gray-100 rounded-xl font-mono text-lg tracking-wide min-h-[3rem] break-words">
         {renderColoredSentence()}
       </div>
       <input
@@ -105,7 +99,7 @@ export default function TypingRaceClient({
         value={userInput}
         onChange={handleChange}
         placeholder="Start typing..."
-        className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 font-mono text-lg"
+        className="w-full p-4 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 font-mono text-lg transition-all duration-200"
       />
     </div>
   )
