@@ -44,9 +44,11 @@ Typing Race is a real-time typing game built with **Next.js**, **React**, and **
 1. **Install dependencies**:
    npm install
 2. **Start the development server:**
-    npm run dev
-3. **Open your browser:**
-    http://localhost:3000
+   node server/index.js
+3. **Start the development environment:**
+   npm run dev
+4. **Open your browser:**
+   http://localhost:3000
 
 
 **Testing with Playwright**
